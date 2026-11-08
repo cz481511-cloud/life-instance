@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' data: blob:; media-src 'self' data: blob:; object-src 'none'; base-uri 'self'; form-action 'none'; frame-src 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="description" content="人生副本：台灣黑色幽默的人生模擬小遊戲（外送員篇、爸媽篇）">
+<title>人生副本</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ===== 標題畫面 ===== -->
+<div id="screen-title" class="screen active">
+  <div class="title-bg"></div>
+  <div class="title-box pixel-box">
+    <div class="title-kicker">LIFE INSTANCES</div>
+    <h1>人生副本</h1>
+    <p class="subtitle">每一種人生，都是一場副本</p>
+    <div class="menu">
+      <button class="btn primary" data-action="new">開始新的人生</button>
+      <button class="btn" data-action="continue" id="btn-continue">繼續（自動存檔）</button>
+      <button class="btn" data-action="load">讀取存檔</button>
+      <button class="btn" data-action="album">人生圖鑑</button>
+    </div>
+    <p class="tiny">本作純屬虛構，平台、店家與人物如有雷同純屬巧合。3D 素材：Kenney（CC0）。</p>
+  </div>
+</div>
+
+<!-- ===== 選擇副本 ===== -->
+<div id="screen-instance" class="screen">
+  <div class="inst-wrap">
+    <h2>選擇你的人生副本</h2>
+    <p class="inst-sub">每個副本約 30 分鐘，可以反覆挑戰不同結局。</p>
+    <div class="inst-grid">
+      <button class="inst-card" data-action="inst-delivery" style="--c1:#17a3a0;--c2:#0d6f6d">
+        <span class="inst-emoji">🛵</span><b>外送員篇</b><small>在台北的街頭跑單，遇見熟客、愛情與意外。3D 騎車。</small><em>可遊玩</em>
+      </button>
+      <button class="inst-card" data-action="inst-parent" style="--c1:#e8417b;--c2:#a3285a">
+        <span class="inst-emoji">👨‍👩‍👧</span><b>爸媽篇</b><small>把孩子從 6 歲養到 15 歲。學務處、家長群組、和其他家長打一架。</small><em>可遊玩</em>
+      </button>
+      <div class="inst-card locked"><span class="inst-emoji">🚕</span><b>計程車篇</b><small>深夜載到酒鬼、孕婦、逃犯。</small><em>製作中</em></div>
+      <div class="inst-card locked"><span class="inst-emoji">🏪</span><b>便利商店篇</b><small>大夜班、奧客、搶劫。</small><em>製作中</em></div>
+      <div class="inst-card locked"><span class="inst-emoji">🧋</span><b>手搖飲創業篇</b><small>開店、請人、對面開了一家一樣的。</small><em>製作中</em></div>
+      <div class="inst-card locked"><span class="inst-emoji">📱</span><b>網紅篇</b><small>蹭熱度、被炎上、業配。</small><em>製作中</em></div>
+    </div>
+    <button class="btn ghost inst-back" data-action="back">返回</button>
+  </div>
+</div>
+
+<!-- ===== 爸媽篇：建立 ===== -->
+<div id="screen-pcreate" class="screen">
+  <div class="create-box pixel-box">
+    <h2>爸媽篇・建立家庭</h2>
+    <label class="field">你的名字<input id="pc-name" maxlength="8" placeholder="例如：阿明" autocomplete="off"></label>
+    <div class="field">你是
+      <div class="gender-pick">
+        <button class="pick sel" data-group="me" data-v="m"><img id="pc-dad" alt=""><span>爸爸</span></button>
+        <button class="pick" data-group="me" data-v="f"><img id="pc-mom" alt=""><span>媽媽</span></button>
+      </div>
+    </div>
+    <label class="field">孩子的名字<input id="pc-kid" maxlength="8" placeholder="例如：小宇" autocomplete="off"></label>
+    <div class="field">孩子是
+      <div class="gender-pick">
+        <button class="pick sel" data-group="kid" data-v="m"><img id="pc-boy" alt=""><span>兒子</span></button>
+        <button class="pick" data-group="kid" data-v="f"><img id="pc-girl" alt=""><span>女兒</span></button>
+      </div>
+    </div>
+    <div class="field">你的工作
+      <div class="origin-list">
+        <button class="origin sel" data-job="delivery"><b>外送員</b><small>時間彈性，可以接送小孩。收入看拚不拚。</small></button>
+        <button class="origin" data-job="office"><b>上班族</b><small>收入穩定，但加班多，常常錯過孩子的事。</small></button>
+        <button class="origin" data-job="shop"><b>開手搖飲店</b><small>自己當老闆，收入大起大落。</small></button>
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn ghost" data-action="back-inst">返回</button>
+      <button class="btn primary" data-action="pstart">開始當爸媽</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 角色建立 ===== -->
+<div id="screen-create" class="screen">
+  <div class="create-box pixel-box">
+    <h2>外送員篇・建立角色</h2>
+    <label class="field">名字
+      <input id="in-name" maxlength="8" placeholder="例如：阿明" autocomplete="off">
+    </label>
+    <div class="field">性別
+      <div class="gender-pick">
+        <button class="pick" data-gender="m"><img src="assets/art/portraits/player_male.png" alt=""><span>男</span></button>
+        <button class="pick" data-gender="f"><img src="assets/art/portraits/player_female.png" alt=""><span>女</span></button>
+      </div>
+    </div>
+    <div class="field">出身
+      <div id="origin-list" class="origin-list"></div>
+    </div>
+    <div class="row">
+      <button class="btn ghost" data-action="back-inst">返回</button>
+      <button class="btn primary" data-action="start">開始跑單</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== 遊戲主畫面 ===== -->
+<div id="screen-game" class="screen">
+  <section id="scene">
+    <div id="world"></div>
+    <div id="stage" class="hidden"></div>
+    <div id="fight" class="hidden"></div>
+    <div id="scene-cover" class="hidden"></div>
+    <div id="scene-caption" class="pixel-box"></div>
+    <div id="hud" class="hidden">
+      <div id="hud-obj"></div>
+      <div id="hud-row"><span id="hud-timer"></span><span id="hud-dist"></span><span id="hud-speed"></span></div>
+    </div>
+    <canvas id="minimap" width="150" height="150"></canvas>
+    <div id="hud-keys">W/↑ 油門　S/↓ 煞車倒退　A D/← → 轉向　空白鍵 急煞</div>
+    <div id="touch" class="hidden">
+      <button data-k="arrowleft">◀</button><button data-k="arrowright">▶</button>
+      <span></span>
+      <button data-k="arrowdown">▼</button><button data-k="arrowup">▲</button>
+    </div>
+    <div id="dialog" class="hidden">
+      <img id="dlg-portrait" alt="">
+      <div class="dlg-body pixel-box">
+        <div id="dlg-name"></div>
+        <div id="dlg-text"></div>
+        <div id="dlg-effects"></div>
+        <div id="dlg-choices"></div>
+      </div>
+    </div>
+    <div id="toast-wrap"></div>
+  </section>
+
+  <aside id="phone">
+    <div class="phone-frame">
+      <div class="phone-status">
+        <span id="st-day"></span><span id="st-clock"></span><span id="st-weather"></span>
+      </div>
+      <div class="app-head">
+        <div class="app-logo">🐼 熊喵外送 <small>騎士版</small></div>
+        <div id="st-rating" class="rating"></div>
+      </div>
+      <div class="stats">
+        <div class="stat"><img src="assets/art/icons/icon_cash.png" alt=""><span>存款</span><b id="st-money"></b></div>
+        <div class="stat"><img src="assets/art/icons/icon_energy.png" alt=""><span>體力</span><div class="bar"><i id="bar-stamina"></i></div></div>
+        <div class="stat"><img src="assets/art/icons/icon_mood.png" alt=""><span>心情</span><div class="bar"><i id="bar-mood"></i></div></div>
+        <div class="stat"><img src="assets/art/icons/icon_wrench.png" alt=""><span>機車</span><div class="bar"><i id="bar-bike"></i></div></div>
+        <div class="stat small"><img src="assets/art/icons/icon_star.png" alt=""><span>名氣</span><b id="st-fame"></b><span class="sep">房租</span><b id="st-rent"></b></div>
+      </div>
+      <div class="tabs">
+        <button class="tab sel" data-tab="work">📦 接單</button>
+        <button class="tab" data-tab="chat">💬 LINE <b id="chat-badge" class="badge hidden">0</b></button>
+      </div>
+      <div id="panel" class="panel"></div>
+      <div id="chat" class="panel hidden"></div>
+      <div class="phone-nav">
+        <button class="nav" data-action="log">紀錄</button>
+        <button class="nav" data-action="save">存檔</button>
+        <button class="nav" data-action="mute" id="btn-mute">音效</button>
+        <button class="nav" data-action="menu">選單</button>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- ===== 通用彈窗 ===== -->
+<div id="modal" class="hidden">
+  <div class="modal-box pixel-box">
+    <div id="modal-title"></div>
+    <div id="modal-body"></div>
+    <div id="modal-actions" class="row"></div>
+  </div>
+</div>
+
+<script src="js/vendor/three.min.js"></script>
+<script src="js/vendor/GLTFLoader.js"></script>
+<script src="js/vendor/SkeletonUtils.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/data.js"></script>
+<script src="js/assets.js"></script>
+<script src="js/world3d.js"></script>
+<script src="js/stage3d.js"></script>
+<script src="js/events.js"></script>
+<script src="js/story.js"></script>
+<script src="js/chat.js"></script>
+<script src="js/chapters.js"></script>
+<script src="js/parent.js"></script>
+<script src="js/parent_scenes.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>

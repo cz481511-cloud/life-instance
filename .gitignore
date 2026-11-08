@@ -1,0 +1,17 @@
+# original Kenney zip downloads (already extracted under assets/3d/)
+assets/3d/_zips/
+
+# local tooling / editor
+.claude/
+.vscode/
+.idea/
+*.log
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# never commit secrets
+.env
+.env.*
+*.pem
+*.key
