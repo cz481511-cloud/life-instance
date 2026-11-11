@@ -15,3 +15,9 @@ Desktop.ini
 .env.*
 *.pem
 *.key
+
+# recorded trailer output
+tools/out/
+
+# personal interview notes (published privately as an artifact, not for the public repo)
+docs/guide.html

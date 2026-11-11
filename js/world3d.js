@@ -402,8 +402,8 @@
     if (W.ready) return;
     if (!window.THREE) { el.innerHTML = '<div style="color:#fff;padding:20px">⚠ 3D 引擎載入失敗（需要網路連線載入 Three.js）。</div>'; return; }
     container = el; mini = miniCanvas; miniCtx = mini.getContext('2d');
-    renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: !!window.__TRAILER });
+    renderer.setPixelRatio(window.__TRAILER ? 1 : Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.outputEncoding = THREE.sRGBEncoding;
@@ -473,6 +473,12 @@
     if (camera) camera.position.set(P.x, 8, P.z + 10);
   };
 
+  /** trailer helpers: place the scooter, read city size */
+  W.setPlayer = (x, z, h, v) => {
+    P.x = x; P.z = z; P.h = h; P.v = v || 0;
+    if (camera) camera.position.set(x - Math.sin(h) * 8.5, 5.8, z - Math.cos(h) * 8.5); // snap the chase camera too
+  };
+  W.grid = { N, PITCH, ROAD, SIZE };
   W.pause = (b) => { paused = b; if (b) for (const k in keys) keys[k] = false; };
   W.isPaused = () => paused;
 
@@ -560,10 +566,20 @@
   function loop(now) {
     requestAnimationFrame(loop);
     const dt = Math.min(0.05, (now - clockT) / 1000); clockT = now;
+    if (window.__OFFLINE) return; // trailer renders frames manually via W.frame
+    // the interior stage updates the shared animation mixers itself when it's showing
+    frameW(dt, !!(G.Stage && G.Stage.isVisible && G.Stage.isVisible()));
+  }
+  /** advance the world by dt and render one frame (also used by the offline trailer renderer) */
+  W.frame = (dt, skipAssets) => frameW(dt, skipAssets);
+  let animT = 0; // seconds of animated time (drives the beacon/arrow bobbing; works for live and offline frames)
+  function frameW(dt, skipAssets) {
+    animT += dt;
+    const now = animT * 1000;
     if (!paused) step(dt);
     updateCars(dt);
     if (peds.length) updatePeds(dt);
-    if (G.Assets) G.Assets.update(dt);
+    if (G.Assets && !skipAssets) G.Assets.update(dt);
     updateCamera(dt);
     // shadow camera follows the scooter
     sun.position.set(P.x + 60, 120, P.z + 25);
@@ -681,6 +697,7 @@
   const camPos = new THREE.Vector3(), look = new THREE.Vector3();
   function updateCamera(dt) {
     if (!camera) return;
+    if (W.cine) { W.cine(camera, P, dt); return; } // scripted camera (trailer)
     const fx = Math.sin(P.h), fz = Math.cos(P.h);
     const back = 8.5 + Math.abs(P.v) * 0.12;
     camPos.set(P.x - fx * back, 5.8 + Math.abs(P.v) * 0.05, P.z - fz * back);

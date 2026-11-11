@@ -781,4 +781,8 @@
 
   G.debug = { get state() { return s; }, set: (k, v) => { s[k] = v; Game.refresh(); }, get cur() { return cur; } };
   initTitle();
+  // dev only: README screenshot driver (never loads on the published site)
+  if (/^(localhost|127\.0\.0\.1)$/.test(location.hostname) && /[?&]shot=/.test(location.search)) {
+    const sc = document.createElement('script'); sc.src = 'tools/shot.js?v=' + Date.now(); document.body.appendChild(sc);
+  }
 })(window.G);

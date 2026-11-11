@@ -9,8 +9,8 @@
   S.init = function (el) {
     if (S.ready) return;
     container = el;
-    renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: !!window.__TRAILER });
+    renderer.setPixelRatio(window.__TRAILER ? 1 : Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.outputEncoding = THREE.sRGBEncoding;
@@ -41,8 +41,13 @@
   function loop(now) {
     requestAnimationFrame(loop);
     const dt = Math.min(0.05, (now - t0) / 1000); t0 = now;
+    if (window.__OFFLINE) return; // trailer renders frames manually via S.frame
+    frameS(dt, false);
+  }
+  S.frame = (dt, skipAssets) => frameS(dt, skipAssets);
+  function frameS(dt, skipAssets) {
     if (!visible) return;
-    if (G.Assets) G.Assets.update(dt);
+    if (G.Assets && !skipAssets) G.Assets.update(dt);
     if (camBase) {
       sway += dt * 0.25;
       camera.position.set(camBase.pos[0] + Math.sin(sway) * 0.35, camBase.pos[1], camBase.pos[2] + Math.cos(sway * 0.8) * 0.15);
@@ -348,6 +353,9 @@
   };
   S.hide = function () { visible = false; if (container) container.classList.add('hidden'); S.clearActors(); };
   S.isVisible = () => visible;
+  /** override the room camera: { pos:[x,y,z], look:[x,y,z] } (trailer) */
+  S.setCam = (c) => { camBase = c; };
+  S.canvas = () => renderer && renderer.domElement;
 
   /* =====================================================
    * Fight minigame (timing bar). Returns Promise<'win'|'lose'>

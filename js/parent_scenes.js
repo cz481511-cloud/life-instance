@@ -33,7 +33,7 @@
     { id: 'bmw', min: 1, max: 6, run: async (h) => {
       const { s, say, ask, res, ME, NPC, KID } = h;
       stage('schoolgate', [
-        { id: 'car', model: 'suv-luxury', x: 1.6, z: 3.6, rot: Math.PI / 2, height: 1.7 },
+        { id: 'car', model: 'suv-luxury', x: 4.6, z: 3.9, rot: Math.PI / 2, height: 1.7 },
         { id: 'rich', model: X.richDad, x: 3.4, z: 2.6, rot: -1.2, height: 1.82 },
         { id: 'guard', model: X.guard, x: 0.6, z: 0.2, rot: 0.6, height: 1.75 },
       ], { caption: '放學時間・校門口' });

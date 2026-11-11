@@ -10,6 +10,16 @@ Write-Host "Delivery game running at http://localhost:$Port/  (Ctrl+C to stop)"
 while ($l.IsListening) {
   $c = $l.GetContext()
   $path = [Uri]::UnescapeDataString($c.Request.Url.AbsolutePath.TrimStart('/'))
+  # dev-only: save a recorded trailer (PUT /tools/out/<name>.mp4|.webm), localhost listener only
+  if ($c.Request.HttpMethod -eq 'PUT') {
+    if ($path -match '^tools/out/(frames/)?[A-Za-z0-9_.-]+\.(mp4|webm|jpg|wav)$') {
+      $dst = [IO.Path]::GetFullPath((Join-Path $root $path))
+      New-Item -ItemType Directory -Force (Split-Path $dst) | Out-Null
+      $fs = [IO.File]::Create($dst); $c.Request.InputStream.CopyTo($fs); $fs.Close()
+      $c.Response.StatusCode = 201
+    } else { $c.Response.StatusCode = 403 }
+    $c.Response.Close(); continue
+  }
   if ($path -eq '') { $path = 'index.html' }
   $file = Join-Path $root $path
   $full = [IO.Path]::GetFullPath($file)

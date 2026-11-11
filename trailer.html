@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="zh-Hant-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' data: blob:; media-src 'self' data: blob:; object-src 'none'; base-uri 'self'; form-action 'none'">
+<title>人生副本 宣傳片</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; height: 100%; background: #07070d; color: #fff; font-family: "Noto Sans TC", "Microsoft JhengHei", sans-serif; overflow: hidden; }
+  /* render targets: fixed 1280x720, kept off-screen-but-rendered behind the output canvas */
+  #world, #stage { position: fixed; left: 0; top: 0; width: 1280px; height: 720px; opacity: 0; pointer-events: none; }
+  #world canvas, #stage canvas { display: block; }
+  #stage.hidden { display: none; }
+  #minimap { display: none; }
+  #out { position: fixed; inset: 0; margin: auto; max-width: 100vw; max-height: 100vh; aspect-ratio: 16 / 9; width: 100vw; background: #000; }
+  #ui { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); display: flex; gap: 10px; align-items: center; z-index: 5;
+    background: rgba(20,20,35,.85); padding: 10px 14px; border-radius: 14px; font-size: 14px; }
+  #ui button { font: inherit; font-weight: 700; border: 0; border-radius: 10px; padding: 8px 16px; cursor: pointer; color: #fff; background: linear-gradient(135deg, #ff4f8b, #ff8a4f); }
+  #ui button.ghost { background: #333a55; }
+  #ui.hidden { display: none; }
+</style>
+</head>
+<body>
+<div id="world"></div>
+<div id="stage" class="hidden"></div>
+<canvas id="minimap" width="10" height="10"></canvas>
+<div id="fight" class="hidden"></div>
+<canvas id="out" width="1280" height="720"></canvas>
+<div id="ui"><span id="status">載入中⋯</span><button id="play" class="ghost" disabled>▶ 播放</button><button id="rec" disabled>● 錄製影片</button></div>
+
+<script src="js/vendor/three.min.js"></script>
+<script src="js/vendor/GLTFLoader.js"></script>
+<script src="js/vendor/SkeletonUtils.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/data.js"></script>
+<script src="js/assets.js"></script>
+<script src="js/world3d.js"></script>
+<script src="js/stage3d.js"></script>
+<script src="js/trailer.js"></script>
+</body>
+</html>
